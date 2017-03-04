@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/datepicker.js"></script>
+    <link rel="stylesheet" media="screen" type="text/css" href="./css/base.css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="./css/clean.css" />
+    <style>
+        .l {
+            width: 500px;
+            height: 500px;
+            background: grey;
+            float: left;
+        }
+        
+        .r {
+            width: 500px;
+            height: 500px;
+            background: orange;
+            float: right;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div>
+        <input id="inputDate">
+        <label id="closeOnSelect" class="checkbox"><input type="checkbox" checked="checked"> Close on selection</label>
+    </div>
+    <div>
+        <div class="l"> <input id="simple-calendar" /></div>
+        <div class="r">
+            <div id="calendar">
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('#simple-calendar').DatePicker({
+            mode: 'single',
+            position: 'right',
+            onBeforeShow: function(el) {
+                if ($('#inputDate').val())
+                    $('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+            },
+            onChange: function(date, el) {
+                $(el).val((date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear());
+                if ($('#closeOnSelect input').attr('checked')) {
+                    $(el).DatePickerHide();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

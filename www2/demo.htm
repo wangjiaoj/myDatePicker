@@ -1,0 +1,26 @@
+<script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+
+
+<!--<input class="Wdate" type="text" onClick="WdatePicker()">
+<font color=red>&lt;- 点我弹出日期控件</font>-->
+
+
+
+<input id="d12" type="text" />
+<img onclick="WdatePicker({el:'d12', dateFmt:'yyyy-MM', minDate:'2016-12',  maxDate:'2017-10'})" src="My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle">
+
+
+<div id="div1" style="float: right;">
+
+</div>
+<input type="text" id="testdiv" />
+<script>
+    WdatePicker({
+        eCont: 'div1',
+        onpicked: function(x) {
+
+            alert('date  is:' + dp.cal.getDateStr());
+            document.getElementById("testdiv").value = dp.cal.getDateStr();
+        }
+    })
+</script>
