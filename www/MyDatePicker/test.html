@@ -21,18 +21,18 @@
         <div class="row"> <input id="simple-calendar" /></div>
         <div class="row">
             <div id="calendar">
-
+                2017-02-01
             </div>
         </div>
         <div class="row">
             <input type="text" data-component="DatePicker">
         </div>
 
-        <div class="row">
+        <!--   <div class="row">
             <div data-component="canlendar">
 
             </div>
-        </div>
+        </div>-->
 
     </div>
 
@@ -43,7 +43,7 @@
             minDate: "2017-01-01 00:00:00",
             maxDate: "2017-10-01 23:59:59",
             onpicked: function(date) {
-                //  alert("date" + date);
+                alert("date" + date);
             }
         });
 
@@ -54,7 +54,7 @@
             dateFmt: 'yyyy-MM-dd HH:mm:ss',
             firstDayOfWeek: "1",
             onpicked: function(date) {
-                // alert("date" + date);
+                alert("date" + date);
             }
         });
 

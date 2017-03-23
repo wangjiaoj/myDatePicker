@@ -33,21 +33,18 @@
      var tpl = {
          header: [
              '<div class="dpTitle">',
-             '<div class="datepickerMonthMenu">',
-             '<div class="navImg datepickerMonthGoPrev"><a></a></div>',
-             '<div class="menuSel MMenu" style="left: 3px;"></div>',
-             '<input class="datapickerinput month" readonly><label class="month"></label>',
-             '<div class="navImg  datepickerMonthGoNext"><a></a></div>',
-             '</div>',
-             '<div class="datepickerYearMenu">',
-             '<div class="navImg datepickerYearGoPrev"><a></a></div>',
-             '<div class="menuSel YMenu"></div>',
-             '<input class="datapickerinput year" readonly><label class="year"></label>',
-             '<div class="navImg datepickerYearGoNext"><a></a></div>',
-             '</div>',
+             '<div class="navImg datepickerYearGoPrev"><a></a></div><div class="navImg datepickerMonthGoPrev"><a></a></div>',
+             '<div style="float:left" class="datepickerMonthMenu"><div class="menuSel MMenu" style="display: none; left: 36px;">',
+             '</div><input class="datapickerinput datapickerInputMonth"></div>',
+             '<div style="float:left"  class="datepickerYearMenu"><div class="menuSel YMenu" style="display: none;"></div><input class="datapickerinput datapickerInputYear"></div>',
+             '<div class="navImg datepickerYearGoNext"><a></a></div><div class="navImg  datepickerMonthGoNext"><a></a></div>',
+             '<div style="float:right"></div>',
              '</div>'
          ],
          time: ['<div class="dpTime" style="display: none;">',
+             '<div class="menuSel hhMenu" style="display: none;"></div>',
+             '<div class="menuSel mmMenu" style="display: none;"></div>',
+             '<div class="menuSel ssMenu" style="display: none;"></div>',
              '<table cellspacing="0" cellpadding="0" border="0"><tbody>',
              '<tr><td rowspan="2"><span class="dpTimeStr">时间</span>&nbsp;<input class="tB inputHour inputTime" maxlength="2"><input value=":" class="tm" readonly=""><input class="tE inputMinute inputTime" maxlength="2"><input value=":" class="tm" readonly=""><input class="tE inputSecond inputTime" maxlength="2"></td><td><button class="dpTimeUp"></button></td></tr>',
              '<tr><td><button class="dpTimeDown"></button></td></tr>',
@@ -55,16 +52,16 @@
              '</div>'
          ],
          control: ['<div class="dpControl">',
-             '<span class="dpButton datepickerClearInput">清空</span>',
-             '<span class="dpButton datepickerToday" type="button" >今天</span>',
-             '<span class="dpButton datepickerOk" type="button">确定</span>',
+             '<input class="dpButton datepickerClearInput" type="button" value="清空">',
+             '<input class="dpButton datepickerToday" type="button" value="今天">',
+             '<input class="dpButton datepickerOk" type="button" value="确定">',
              '</div>'
          ],
-
+         Quickselect: '<div class="datepickerQuickSelect"></div>',
          days: [
-             '<table class="WdayTable" width="100%" border="0" cellspacing="0" cellpadding="0">',
-             '<thead><tr align="center"><th><%=weekslist[0]%></th><th><%=weekslist[1]%></th><th><%=weekslist[2]%></th><th><%=weekslist[3]%></th><th><%=weekslist[4]%></th><th><%=weekslist[5]%></th><th><%=weekslist[6]%></th></tr></thead>',
-             '<tbody><tr>',
+             '<table class="WdayTable" width="100%" border="0" cellspacing="0" cellpadding="0"><tbody>',
+             '<tr class="MTitle" align="center"><td><%=weekslist[0]%></td><td><%=weekslist[1]%></td><td><%=weekslist[2]%></td><td><%=weekslist[3]%></td><td><%=weekslist[4]%></td><td><%=weekslist[5]%></td><td><%=weekslist[6]%></td></tr>',
+             '<tr>',
              '<td class="<%=weeks[0].days[0].classname%>"><span><%=weeks[0].days[0].text%></span></td>',
              '<td class="<%=weeks[0].days[1].classname%>"><span><%=weeks[0].days[1].text%></span></td>',
              '<td class="<%=weeks[0].days[2].classname%>"><span><%=weeks[0].days[2].text%></span></td>',
@@ -121,10 +118,10 @@
              '</tbody></table>'
          ],
          yearMenu: [
-             '<table class="year" cellspacing="0" cellpadding="3" border="0" nowrap="nowrap" data-year="<%=currentYear%>"><tbody>',
+             '<table cellspacing="0" cellpadding="3" border="0" nowrap="nowrap" data-year="<%=currentYear%>"><tbody>',
              '<tr><td                  class="<%=data[0].classname%>"><%=data[0].text%></td><td  class="<%=data[6].classname%>"><%=data[6].text%></td></tr>',
              '<tr nowrap="nowrap"><td  class="<%=data[1].classname%>"><%=data[1].text%></td><td  class="<%=data[7].classname%>"><%=data[7].text%></td></tr>',
-             '<tr nowrap="nowrap"><td  class="<%=data[2].classname%>"><%=data[2].text%></td><td  class="<%=data[8].classname%>"><%=data[8].text%></td></tr>',
+             '<tr nowrap="nowrap"><td  class="<%=data[2].classname%>"><%=data[2].text%></td><td  class="<%=data[7].classname%>"><%=data[8].text%></td></tr>',
              '<tr nowrap="nowrap"><td  class="<%=data[3].classname%>"><%=data[3].text%></td><td  class="<%=data[9].classname%>"><%=data[9].text%> </td></tr>',
              '<tr nowrap="nowrap"><td  class="<%=data[4].classname%>"><%=data[4].text%></td><td  class="<%=data[10].classname%>"><%=data[10].text%></td></tr>',
              '<tr nowrap="nowrap"><td  class="<%=data[5].classname%>"><%=data[5].text%></td><td  class="<%=data[11].classname%>"><%=data[11].text%></td></tr>',
@@ -262,7 +259,7 @@
       */
      DatePickerfn.bulidCalender = function () {
          var $WdateDiv = $('<div class="WdateDiv"></div>');
-         $WdateDiv.append(tpl.header.join(''), '<div  class="datepickerDays"></div>', tpl.time.join(''), tpl.control.join(''));
+         $WdateDiv.append(tpl.header.join(''), '<div  class="datepickerDays"></div>', tpl.time.join(''), tpl.Quickselect, tpl.control.join(''));
 
          if (this.options.eCont) {
              this.options.eCont.empty().append($WdateDiv);
@@ -301,7 +298,7 @@
              }
          } else {
              dpControl.css('display', 'none');
-             //$WdateDiv.find('.datepickerQuickSelect').css('display', 'none');
+             $WdateDiv.find('.datepickerQuickSelect').css('display', 'none');
          }
          this.bulidDay();
          this.yearOrMonthButtonControl();
@@ -469,7 +466,7 @@
       * @return {void}
       */
      DatePickerfn.bulidMonthMenu = function () {
-         var months = ['01月', '02月', '03月', '04月', '05月', '06月', '07月', '08月', '09月', '10月', '11月', '12月'];
+         var months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一', '十二'];
          var maxDate = new Date(this.options.maxDate);
          var date = new Date(this.current.getTime());
          var minDate = new Date(this.options.minDate);
@@ -545,53 +542,31 @@
          });
 
          wrapperHeader.find('.menuSel').on('click', 'td.menu,td.yearMenuControl', $.proxy(this.menuClikHandler, this));
-         var input = wrapperHeader.find('.datapickerinput');
-         var lable = wrapperHeader.find('label');
-         input.on('click', function () {
+         wrapperHeader.find('.datapickerinput').on('focus', function () {
              var date;
              var year;
-             if ($(this).hasClass('year')) {
-                 if (!$(this).hasClass('active')) {
-                     input.removeClass('active');
-                     lable.removeClass('active');
-                     date = new Date(self.current.getTime());
-                     year = date.getFullYear();
-                     self.bulidYearMenu(year);
-                     $(this).addClass('active');
-                     $(this).siblings('label').addClass('active');
-                     self.monthMenuWerapper.removeClass('active');
-                     self.yearMenuWerapper.addClass('active');
-                 } else {
-                     $(this).removeClass('active');
-                     $(this).siblings('label').removeClass('active');
-                     self.yearMenuWerapper.removeClass('active');
-                 }
+             if ($(this).hasClass('datapickerInputYear')) {
+                 date = new Date(self.current.getTime());
+                 year = date.getFullYear();
+                 self.bulidYearMenu(year);
+                 self.monthMenuWerapper.css('display', 'none');
+                 self.yearMenuWerapper.css('display', 'block');
              } else {
-                 if (!$(this).hasClass('active')) {
-                     input.removeClass('active');
-                     lable.removeClass('active');
-                     self.bulidMonthMenu();
-                     $(this).addClass('active');
-                     $(this).siblings('label').addClass('active');
-                     self.monthMenuWerapper.addClass('active');
-                     self.yearMenuWerapper.removeClass('active');
-                 } else {
-                     $(this).removeClass('active');
-                     $(this).siblings('label').removeClass('active');
-                     self.monthMenuWerapper.removeClass('active');
-                 }
+                 self.bulidMonthMenu();
+                 self.monthMenuWerapper.css('display', 'block');
+                 self.yearMenuWerapper.css('display', 'none');
              }
          });
 
-         //  $('body').on('click.' + this.id + 'menuControl', function (e) {
-         //      var ele = $(e.target);
-         //      if (ele.hasClass('datapickerinput')) {
-         //          return false;
-         //      } else {
-         //          self.monthMenuWerapper.css('display', 'none');
-         //          self.yearMenuWerapper.css('display', 'none');
-         //      }
-         //  });
+         $('body').on('click.' + this.id + 'menuControl', function (e) {
+             var ele = $(e.target);
+             if (ele.hasClass('datapickerinput')) {
+                 return false;
+             } else {
+                 self.monthMenuWerapper.css('display', 'none');
+                 self.yearMenuWerapper.css('display', 'none');
+             }
+         });
 
          // 绑定日期点击事件
          var dayWrapper = datePickerWrapper.find('.datepickerDays');
@@ -824,22 +799,15 @@
          e.stopPropagation();
          var self = this;
          var ele = $(e.target);
-         var wrapperHeader = this.wrapper.find('.dpTitle');
-         var input = wrapperHeader.find('input');
-         var label = wrapperHeader.find('label');
          if (ele.hasClass('menu')) {
              if (ele.hasClass('monthMenu')) {
                  var monthSelect = parseInt(ele.data('month')) - 1;
                  self.yearOrMonthChange(4, monthSelect);
-                 self.monthMenuWerapper.removeClass('active');
-                 input.removeClass('active');
-                 label.removeClass('active');
+                 self.monthMenuWerapper.css('display', 'none');
              } else {
                  var yearSelect = ele.text();
                  self.yearOrMonthChange(3, yearSelect);
-                 self.yearMenuWerapper.removeClass('active');
-                 input.removeClass('active');
-                 label.removeClass('active');
+                 self.yearMenuWerapper.css('display', 'none');
              }
          } else {
              var year;
@@ -851,10 +819,7 @@
                  }
                  self.bulidYearMenu(year);
              } else if (ele.hasClass('yearMenuClose')) {
-                 self.yearMenuWerapper.removeClass('active');
-                 self.yearMenuWerapper.removeClass('active');
-                 label.removeClass('active');
-                 input.removeClass('active');
+                 table = ele.parents('.YMenu').css('display', 'none');
              } else if (ele.hasClass('yearMenuGoNext')) {
                  table = ele.parents('table').siblings('table');
                  if (table.length) {
