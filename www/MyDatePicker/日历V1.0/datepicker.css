@@ -285,7 +285,7 @@
     
     .WdateDiv .dpTime .tE {
         border-left: 0;
-        /*border-right: 0;*/
+        border-right: 0;
     }
     
     .WdateDiv .dpTime .tm {
@@ -294,33 +294,18 @@
         border-right: 0;
     }
     
-    .WdateDiv .dpTime .dptimeTd {
-        position: relative;
-        width: 10px;
-        height: 5px;
-    }
-    
-    .WdateDiv .dpTime .dpTimeUp,
-    .WdateDiv .dpTime .dpTimeDown {
-        left: 3px;
-        margin: 0px;
-        display: inline-block;
-        position: absolute;
-        border-width: 5px;
-        border-style: dashed;
-        border-color: transparent;
-    }
-    
     .WdateDiv .dpTime .dpTimeUp {
-        border-bottom-color: #666;
-        top: -2px;
-        cursor: pointer;
+        height: 10px;
+        width: 13px;
+        border: 0px;
+        background: url(../img/img.gif) no-repeat -32px -16px;
     }
     
     .WdateDiv .dpTime .dpTimeDown {
-        border-top-color: #666;
-        top: 1px;
-        cursor: pointer;
+        height: 10px;
+        width: 13px;
+        border: 0px;
+        background: url(../img/img.gif) no-repeat -48px -16px;
     }
     /*按钮*/
     

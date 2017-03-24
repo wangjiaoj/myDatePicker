@@ -19,29 +19,26 @@
 <body>
     <div>
         <div class="row"> <input id="simple-calendar" /></div>
+
         <div class="row">
-            <div id="calendar">
-                2017-02-01
-            </div>
-        </div>
-        <div class="row">
-            <input type="text" data-component="DatePicker">
+            <span id="calendar">2017-1-1</span>
         </div>
 
-        <!--   <div class="row">
+        <div class="row">
+            <input type="text" data-component="DatePicker" data-min-Date="2017-01-05 00:00:00" data-max-Date="2017-10-03 23:59:59">
+        </div>
+
+        <div class="row">
             <div data-component="canlendar">
-
             </div>
-        </div>-->
+        </div>
 
     </div>
 
 
     <script type="text/javascript">
         new DatePicker({
-            eCont: '#calendar',
-            minDate: "2017-01-01 00:00:00",
-            maxDate: "2017-10-01 23:59:59",
+            el: '#calendar',
             onpicked: function(date) {
                 alert("date" + date);
             }
@@ -49,8 +46,8 @@
 
         new DatePicker({
             el: '#simple-calendar',
-            minDate: "2016-12-03 00:00:00",
-            maxDate: "2017-10-05 23:59:59",
+            minDate: "2016-12-03 05:00:00",
+            maxDate: "2017-10-05 15:59:59",
             dateFmt: 'yyyy-MM-dd HH:mm:ss',
             firstDayOfWeek: "1",
             onpicked: function(date) {
