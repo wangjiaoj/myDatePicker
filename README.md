@@ -2,7 +2,7 @@
 目前在www/MyDatePicker文件夹中只完成了初版,待后续继续改进
 
 主要功能简单描述：
-
+可以设置最大和最小日期，关于超期控制:当所选日期超过最大日期时,选中日期将自动修正为最大日期
 
 //设置
 ```javascript
@@ -16,10 +16,9 @@ defalutOptions={
          isShowOK: true, //bool	true	 
          isShowToday: true, //bool	true	 
          readOnly: false, //isShowClear false 和 readOnly true 最好同时使用,
-         dateFmt: 'yyyy-MM-dd', // 格式:'yyyy-MM-dd HH:mm:ss   'H:mm:ss':时分秒   'yyyy-MM':年月 目前暂不支持'H:mm:ss':时分秒    
+         dateFmt: 'yyyy-MM-dd', // 格式:'yyyy-MM-dd HH:mm:ss :年月日时分秒   'yyyy-MM-dd':年月日      
          firstDayOfWeek: 0, //默认一周日开始,可设置 0 - 6 的任意一个数字,0:星期日 1:星期一 
          position: 'bottom', //自定义弹出位置top，left,right,bottom
-         calendars: 1, //单日历还是双日历---待实现
          onpicked: function(date) {}, //选中日期时的回调函数,date是选中的日期，类型：Date
 }
 ```

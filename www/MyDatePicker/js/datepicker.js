@@ -184,25 +184,27 @@
       */
      var DatePicker = function (options) {
          /*
+            注意：一,IE下用yyyy/mm/dd的格式来new Date();二,赋值问题，注意时间类型是引用对象
             关于时间格式问题，有的时间包括时分秒，因此 currnet 和date保存数据时应该都是按照new Date()的格式保存
-            两个问题，一个是IE下用yyyy/mm/dd的格式来new Date()
-            另一个是赋值问题，注意时间类型是引用对象
+            date:  格式：new Date()   默认选中当前日期,用于保存实际上选中的日期
+            current: 格式："yyyy-mm-dd" 不是当前实际选中的日期，是用于计算日历展示的时间参数,初始化时默认等于date
         */
-
          this.options = $.extend({}, defaultOptions, options || {});
          this.id = datepickerId++;
+         // 处理el和eCont
          if (options.el && typeof options.el === 'string') {
              this.options.el = $(this.options.el);
          }
          if (options.eCont && typeof options.eCont === 'string') {
              this.options.eCont = $(this.options.eCont);
          }
+         // 处理时间格式
          if (this.options.dateFmt === 'yyyy-MM-dd HH:mm:ss') {
-             this.showTime = true;
+             this.showHours = true;
          } else {
-             this.showTime = false;
+             this.showHours = false;
          }
-         // 日期以/分隔保存，以防止在IE下 new Date()报错
+         // 处理最大最小日期
          this.options.maxDate = (this.options.maxDate).replace(/-/g, '/');
          this.options.minDate = (this.options.minDate).replace(/-/g, '/');
 
@@ -222,8 +224,6 @@
          } else {
              current = new Date();
          }
-
-
          this.current = new Date(current.getTime());
 
          // 如果起始时间大于最大时间或小于最小时间时
@@ -233,8 +233,7 @@
              this.current = new Date(this.options.minDate);
          }
          this.date = new Date(this.current.getTime());
-         // date:  格式：new Date()默认选中当前日期,用于保存实际上选中的日期
-         //  current: 格式："yyyy-mm-dd" 不是当前实际选中的日期，是用于计算日历展示的时间参数,初始化时默认等于date
+
          this.init();
      };
 
@@ -277,18 +276,16 @@
 
 
          this.wrapper = $WdateDiv;
-         this.yearMenuWerapper = this.wrapper.find('.YMenu');
-         this.monthMenuWerapper = this.wrapper.find('.MMenu');
+         this.yearMenuWrapper = this.wrapper.find('.YMenu');
+         this.monthMenuWrapper = this.wrapper.find('.MMenu');
          var dpControl = $WdateDiv.find('.dpControl');
 
          if (!this.options.eCont) {
-             var dpTime = $WdateDiv.find('.dpTime');
-             if (this.showTime) {
+             if (this.showHours) {
+                 var dpTime = $WdateDiv.find('.dpTime');
                  dpTime.css('display', 'block');
-                 var current = this.current;
-                 dpTime.find('input:eq(0)').val(current.getHours()).addClass('active');
-                 dpTime.find('input:eq(2)').val(current.getMinutes());
-                 dpTime.find('input:eq(4)').val(current.getSeconds());
+                 this.sethoursInput();
+                 dpTime.find('input:eq(0)').addClass('active');
              }
              if (!this.options.isShowClear) {
                  dpControl.find('.datepickerClearInput').css('display', 'none');
@@ -301,7 +298,6 @@
              }
          } else {
              dpControl.css('display', 'none');
-             //$WdateDiv.find('.datepickerQuickSelect').css('display', 'none');
          }
          this.bulidDay();
          this.yearOrMonthButtonControl();
@@ -337,15 +333,14 @@
              var dow = (date.getDay() - options.firstDayOfWeek) % 7;
              date.addDays(-(dow + (dow < 0 ? 7 : 0)));
              cnt = 0;
-             var curr;
-             curr = new Date(this.current.getTime());
-             if (curr > new Date(options.maxDate)) {
-                 curr = new Date(options.maxDate);
-                 this.current = new Date(curr.getTime());
-             } else if (curr < new Date(options.minDate)) {
-                 curr = new Date(options.minDate);
-                 this.current = new Date(curr.getTime());
-             }
+             var curr = new Date(this.current.getTime());
+             //  if (curr > new Date(options.maxDate)) {
+             //      curr = new Date(options.maxDate);
+             //      this.current = new Date(curr.getTime());
+             //  } else if (curr < new Date(options.minDate)) {
+             //      curr = new Date(options.minDate);
+             //      this.current = new Date(curr.getTime());
+             //  }
              while (cnt < 42) {
                  var indic = parseInt(cnt / 7);
                  var indic2 = cnt % 7;
@@ -460,7 +455,7 @@
 
          // datepickerYears template
          var html = tmpl(tpl.yearMenu.join(''), data);
-         this.yearMenuWerapper.empty().append(html);
+         this.yearMenuWrapper.empty().append(html);
      };
 
      /**
@@ -516,7 +511,7 @@
              }
          }
          var html = tmpl(tpl.monthMenu.join(''), data);
-         this.monthMenuWerapper.empty().append(html);
+         this.monthMenuWrapper.empty().append(html);
      };
 
      /**
@@ -554,31 +549,31 @@
                  if (!$(this).hasClass('active')) {
                      input.removeClass('active');
                      lable.removeClass('active');
+                     self.monthMenuWrapper.removeClass('active');
                      date = new Date(self.current.getTime());
                      year = date.getFullYear();
                      self.bulidYearMenu(year);
                      $(this).addClass('active');
                      $(this).siblings('label').addClass('active');
-                     self.monthMenuWerapper.removeClass('active');
-                     self.yearMenuWerapper.addClass('active');
+                     self.yearMenuWrapper.addClass('active');
                  } else {
                      $(this).removeClass('active');
                      $(this).siblings('label').removeClass('active');
-                     self.yearMenuWerapper.removeClass('active');
+                     self.yearMenuWrapper.removeClass('active');
                  }
              } else {
                  if (!$(this).hasClass('active')) {
                      input.removeClass('active');
                      lable.removeClass('active');
+                     self.yearMenuWrapper.removeClass('active');
                      self.bulidMonthMenu();
                      $(this).addClass('active');
                      $(this).siblings('label').addClass('active');
-                     self.monthMenuWerapper.addClass('active');
-                     self.yearMenuWerapper.removeClass('active');
+                     self.monthMenuWrapper.addClass('active');
                  } else {
                      $(this).removeClass('active');
                      $(this).siblings('label').removeClass('active');
-                     self.monthMenuWerapper.removeClass('active');
+                     self.monthMenuWrapper.removeClass('active');
                  }
              }
          });
@@ -588,8 +583,8 @@
          //      if (ele.hasClass('datapickerinput')) {
          //          return false;
          //      } else {
-         //          self.monthMenuWerapper.css('display', 'none');
-         //          self.yearMenuWerapper.css('display', 'none');
+         //          self.monthMenuWrapper.css('display', 'none');
+         //          self.yearMenuWrapper.css('display', 'none');
          //      }
          //  });
 
@@ -624,7 +619,6 @@
              } else if (ele.hasClass('datepickerOk')) {
                  self.date = new Date(self.current.getTime());
              }
-
              self.elSetValue();
              // datapicker关闭
              self.hidden();
@@ -721,6 +715,7 @@
                      var result = self.valid(val);
                      if (result) {
                          self.elSetValue();
+                         self.sethoursInput();
                      }
                  }
              });
@@ -743,6 +738,8 @@
          var date = new Date(this.current.getTime());
          var wrapperHeader = this.wrapper.find('.dpTitle');
          var input = wrapperHeader.find('.datapickerinput');
+         var maxDate = new Date(this.options.maxDate);
+         var minDate = new Date(this.options.minDate);
          /*
           * 1,2,为点击月份或年份增加或减少按钮
           * 3,4为点击月份或年份菜单
@@ -763,7 +760,15 @@
              default:
                  break;
          }
+         // 年份或月份变更后 经常会发生超出最大最小日期限制的情况，此时对current进行修正
+         if (date > maxDate) {
+             date = new Date(maxDate.getTime());
+         } else if (date < minDate) {
+             date = new Date(minDate.getTime());
+         }
+
          this.current = new Date(date.getTime());
+         this.sethoursInput();
          this.yearOrMonthButtonControl();
          // 重新渲染tpl.day中的内容，并进行填充；
          this.bulidDay();
@@ -772,7 +777,7 @@
      };
 
      /**
-      * 日期选择器中的年份月粉增加或减少按钮可点击状态控制
+      * 日期选择器中的年份月份增加或减少按钮可点击状态控制
       * @private
       * @return {void}
       */
@@ -831,13 +836,13 @@
              if (ele.hasClass('monthMenu')) {
                  var monthSelect = parseInt(ele.data('month')) - 1;
                  self.yearOrMonthChange(4, monthSelect);
-                 self.monthMenuWerapper.removeClass('active');
+                 self.monthMenuWrapper.removeClass('active');
                  input.removeClass('active');
                  label.removeClass('active');
              } else {
                  var yearSelect = ele.text();
                  self.yearOrMonthChange(3, yearSelect);
-                 self.yearMenuWerapper.removeClass('active');
+                 self.yearMenuWrapper.removeClass('active');
                  input.removeClass('active');
                  label.removeClass('active');
              }
@@ -851,8 +856,8 @@
                  }
                  self.bulidYearMenu(year);
              } else if (ele.hasClass('yearMenuClose')) {
-                 self.yearMenuWerapper.removeClass('active');
-                 self.yearMenuWerapper.removeClass('active');
+                 self.yearMenuWrapper.removeClass('active');
+                 self.yearMenuWrapper.removeClass('active');
                  label.removeClass('active');
                  input.removeClass('active');
              } else if (ele.hasClass('yearMenuGoNext')) {
@@ -898,7 +903,7 @@
      };
 
      /**
-      * 处理日期变化
+      * 处理日历主体部分点击带来的日期变化
       * @private
       * @param {Number} type 日期变化类型
       * @param {Number} num 变化数量
@@ -906,14 +911,16 @@
       */
      DatePickerfn.dateChange = function (type, num) {
          var input = this.wrapper.find('.datapickerinput');
+         var maxDate = new Date(this.options.maxDate);
+         var minDate = new Date(this.options.minDate);
          var date;
+         /*
+          * 1,2,3为点击日历上的日期，
+          * 1是当前月日期，3是日历上前一个月的某天，2是日历上后一月的某天
+          * type为空时，为点击当天
+          */
          if (type) {
              date = new Date(this.current.getTime());
-             /*
-              * 5,6,7为点击日历上的日期，
-              * 5是当前月日期，6是日历上前一个月的某天，7是日历上后一月的某天
-              * YearOrMonth为空时，为点击当天
-              */
              switch (type) {
                  case 1:
                      date.setDate(num);
@@ -929,8 +936,15 @@
          } else {
              date = new Date();
          }
+         // 日期选择后 经常会发生超出最大最小日期限制的情况，此时对current和date进行修正(此处主要是今天点击和时分秒容易超期)
+         if (date > maxDate) {
+             date = new Date(maxDate.getTime());
+         } else if (date < minDate) {
+             date = new Date(minDate.getTime());
+         }
          this.date = date;
          this.current = new Date(date.getTime());
+         this.sethoursInput();
          // 重新渲染tpl.day中的内容，并进行填充；
          this.bulidDay();
          input.eq(0).val((date.getMonth() + 1) + '月');
@@ -938,10 +952,8 @@
      };
 
      /**
-      * 处理时分秒变化后的显示框数据显示
+      * 处理时分秒变化后的current数据的维护
       * @private
-      * @param {Number} type 年份和月份变化类型
-      * @param {Number} num 变化数量
       * @return {void}
       */
      DatePickerfn.hoursChange = function () {
@@ -950,6 +962,26 @@
          var min = dpTime.find('input:eq(2)').val();
          var sec = dpTime.find('input:eq(4)').val();
          this.current.setHours(hour, min, sec);
+     };
+
+     /**
+      * 修改时分秒input框的时间显示
+      * @private
+      * @param {Number} type 年份和月份变化类型
+      * @param {Number} num 变化数量
+      * @return {void}
+      */
+     DatePickerfn.sethoursInput = function () {
+         if (this.showHours) {
+             var dpTime = this.wrapper.find('.dpTime');
+             var current = this.current;
+             var hour = current.getHours();
+             var min = current.getMinutes();
+             var sec = current.getSeconds();
+             dpTime.find('input:eq(0)').val(hour);
+             dpTime.find('input:eq(2)').val(min);
+             dpTime.find('input:eq(4)').val(sec);
+         }
      };
 
      /**
@@ -985,7 +1017,7 @@
          var val;
          var el = this.options.el;
          if (currnet && el && !this.options.eCont) {
-             if (this.showTime) {
+             if (this.showHours) {
                  val = currnet.getFullYear() + '-' + (currnet.getMonth() + 1) + '-' + currnet.getDate() + ' ' + currnet.getHours() + ':' + currnet.getMinutes() + ':' + currnet.getSeconds();
              } else {
                  val = currnet.getFullYear() + '-' + (currnet.getMonth() + 1) + '-' + currnet.getDate();
