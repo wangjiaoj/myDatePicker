@@ -1,0 +1,74 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="datepicker.js"></script>
+    <link rel="stylesheet" media="screen" type="text/css" href="datepicker.css" />
+</head>
+<style>
+    .row {
+        width: 300px;
+        height: 300px;
+        background: grey;
+        float: left;
+        margin: 10px;
+    }
+</style>
+
+<body>
+    <div>
+        <div class="row"> <input id="simple-calendar" /></div>
+
+        <div class="row">
+            <span id="calendar">2017-1-1</span>
+        </div>
+
+        <div class="row">
+            <input type="text" data-component="DatePicker" data-min-Date="2017-01-05 00:00:00" data-max-Date="2017-10-03 23:59:59">
+        </div>
+
+        <div class="row">
+            <div data-component="canlendar">
+            </div>
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript">
+        new DatePicker({
+            el: '#calendar',
+            onpicked: function(date) {
+                alert("date" + date);
+            }
+        });
+
+        new DatePicker({
+            el: '#simple-calendar',
+            minDate: "2016-12-03 05:00:00",
+            maxDate: "2017-10-05 15:59:59",
+            dateFmt: 'yyyy-MM-dd HH:mm:ss',
+            firstDayOfWeek: "1",
+            onpicked: function(date) {
+                alert("date" + date);
+            }
+        });
+
+        // {
+        //     minDate: "2017-01-01 00:00:00",
+        //     maxDate: "2017-10-01 23:59:59",
+        //     isShowClear: false,
+        //     readOnly: true
+        // }
+
+        // {
+        //     minDate: "2017-01-01 00:00:00",
+        //     maxDate: "2017-10-01 23:59:59",
+        //     firstDayOfWeek: "1",
+        //     dateFmt: 'yyyy-MM-dd HH:mm:ss'
+        // }
+    </script>
+</body>
+
+</html>

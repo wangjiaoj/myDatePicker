@@ -49,8 +49,8 @@
          ],
          time: ['<div class="dpTime" style="display: none;">',
              '<table cellspacing="0" cellpadding="0" border="0"><tbody>',
-             '<tr><td rowspan="2"><span class="dpTimeStr">时间</span>&nbsp;<input class="tB inputHour inputTime" maxlength="2"><input value=":" class="tm" readonly=""><input class="tE inputMinute inputTime" maxlength="2"><input value=":" class="tm" readonly=""><input class="tE inputSecond inputTime" maxlength="2"></td><td><button class="dpTimeUp"></button></td></tr>',
-             '<tr><td><button class="dpTimeDown"></button></td></tr>',
+             '<tr><td rowspan="2"><span class="dpTimeStr">时间</span>&nbsp;<input class="tB inputHour inputTime" maxlength="2"><input value=":" class="tm" readonly=""><input class="tE inputMinute inputTime" maxlength="2"><input value=":" class="tm" readonly=""><input class="tE inputSecond inputTime" maxlength="2"></td><td class="dptimeTd" ><span class="dpTimeUp"></span></td></tr>',
+             '<tr><td class="dptimeTd" ><span class="dpTimeDown"></span></td></tr>',
              '</tbody></table>',
              '</div>'
          ],
@@ -60,7 +60,6 @@
              '<span class="dpButton datepickerOk" type="button">确定</span>',
              '</div>'
          ],
-
          days: [
              '<table class="WdayTable" width="100%" border="0" cellspacing="0" cellpadding="0">',
              '<thead><tr align="center"><th><%=weekslist[0]%></th><th><%=weekslist[1]%></th><th><%=weekslist[2]%></th><th><%=weekslist[3]%></th><th><%=weekslist[4]%></th><th><%=weekslist[5]%></th><th><%=weekslist[6]%></th></tr></thead>',
@@ -664,11 +663,7 @@
              } else {
                  val = parseInt(input.val());
                  if (val < 59) {
-                     if (val < 54) {
-                         val = val + 5;
-                     } else {
-                         val++;
-                     }
+                     val++;
                      input.val(val);
                      self.hoursChange();
                  }
@@ -682,17 +677,6 @@
                  val = parseInt(input.val());
                  if (val > 0) {
                      val--;
-                     input.val(val);
-                     self.hoursChange();
-                 }
-             } else {
-                 val = parseInt(input.val());
-                 if (val > 0) {
-                     if (val > 5) {
-                         val = val - 5;
-                     } else {
-                         val--;
-                     }
                      input.val(val);
                      self.hoursChange();
                  }
